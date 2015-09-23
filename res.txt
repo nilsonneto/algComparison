@@ -1,0 +1,15 @@
+2015-09-23 09:43:30.122000
+Vetor de tamanho 1
+Select
+Best:235
+Worst:185
+Random (0): 183
+Random (1): 165
+Random (2): 173
+Vetor de tamanho 2
+Select
+Best:20395
+Worst:15395
+Random (0): 11163
+Random (1): 11133
+Random (2): 11015
