@@ -4,6 +4,8 @@ import math
 import random
 import datetime
 from random import choice
+import matplotlib.pyplot as plt
+import timeit
 
 '''
 def insert(vetor):
@@ -241,58 +243,186 @@ def createVector(size):
 def createRandom(size):
     return random.sample(range(1, size + 1), size)
 
+def wrapper(func, *args, **kwargs):
+    def wrapped():
+        return func(*args, **kwargs)
+    return wrapped
 
 def test():
-    printf(str(datetime.datetime.now()))
-    numIter = 2
-    numRdmIter = 3
+    baseVetor = 2
+    numIter = 4
+    numRdmIter = 1
+    resSimples0 = []
+    resSimples1 = []
+    resSimples2 = []
+    resSimples3 = []
+    resSimples4 = []
+    resSimples5 = []
+    resSimples6 = []
+    resSimples7 = []
+    resSimples8 = []
+    resSimples9 = []
+    tmpSimples0 = []
+    tmpSimples1 = []
+    tmpSimples2 = []
+    tmpSimples3 = []
+    tmpSimples4 = []
+    tmpSimples5 = []
+    tmpSimples6 = []
+    tmpSimples7 = []
+    tmpSimples8 = []
+    tmpSimples9 = []
+    rdm = []
+    rdmTim = []
+
     for i in range(1, numIter + 1):
         insertRdom = []
         selectRdom = []
         mergeRdom = []
         quickRdom = []
         heapRdom = []
+        insertTime = []
+        selectTime = []
+        mergeTime = []
+        quickTime = []
+        heapTime = []
 
-        printf("Vetor de tamanho " + str(i))
+        ord, rev = createVector(pow(baseVetor, i))
 
-        ord, rev = createVector(pow(10, i))
-        insertBest, _ = insert(list(ord))
-        insertWors, _ = insert(list(rev))
-        selectBest, _ = select(list(ord))
-        selectWors, _ = select(list(rev))
-        mergeBest, _ = merge(list(ord))
-        mergeWors, _ = merge(list(rev))
-        quickBest, _ = quick(list(ord))
-        quickWors, _ = quick(list(rev))
-        heapBest, _ = heap(list(ord))
-        heapWors, _ = heap(list(rev))
+        resSimples, _ = insert(list(ord))
+        resSimples0.append(resSimples)
+        wrapped = wrapper(insert, list(ord))
+        tmpSimples0.append(timeit.timeit(wrapped, number=10000))
+
+        resSimples, _ = select(list(ord))
+        resSimples1.append(resSimples)
+        wrapped = wrapper(select, list(ord))
+        tmpSimples1.append(timeit.timeit(wrapped, number=10000))
+
+        resSimples, _ = merge(list(ord))
+        resSimples2.append(resSimples)
+        wrapped = wrapper(merge, list(ord))
+        tmpSimples2.append(timeit.timeit(wrapped, number=1000))
+
+        resSimples, _ = quick(list(ord))
+        resSimples3.append(resSimples)
+        wrapped = wrapper(quick, list(ord))
+        tmpSimples3.append(timeit.timeit(wrapped, number=10000))
+
+        resSimples, _ = heap(list(ord))
+        resSimples4.append(resSimples)
+        wrapped = wrapper(heap, list(ord))
+        tmpSimples4.append(timeit.timeit(wrapped, number=10000))
+
+        resSimples, _ = insert(list(rev))
+        resSimples5.append(resSimples)
+        wrapped = wrapper(insert, list(rev))
+        tmpSimples5.append(timeit.timeit(wrapped, number=10000))
+
+        resSimples, _ = select(list(rev))
+        resSimples6.append(resSimples)
+        wrapped = wrapper(select, list(rev))
+        tmpSimples6.append(timeit.timeit(wrapped, number=10000))
+
+        resSimples, _ = merge(list(rev))
+        resSimples7.append(resSimples)
+        wrapped = wrapper(merge, list(rev))
+        tmpSimples7.append(timeit.timeit(wrapped, number=10000))
+
+        resSimples, _ = quick(list(rev))
+        resSimples8.append(resSimples)
+        wrapped = wrapper(quick, list(rev))
+        tmpSimples8.append(timeit.timeit(wrapped, number=10000))
+
+        resSimples, _ = heap(list(rev))
+        resSimples9.append(resSimples)
+        wrapped = wrapper(heap, list(rev))
+        tmpSimples9.append(timeit.timeit(wrapped, number=10000))
 
         for j in range(numRdmIter):
-            rdmVec = createRandom(pow(10, i))
+            rdmVec = createRandom(pow(baseVetor, i))
+
             numInt, _ = insert(list(rdmVec))
             insertRdom.append(numInt)
+            wrapped = wrapper(insert, list(rdmVec))
+            insertTime.append(timeit.timeit(wrapped, number=10000))
+
             numInt, _ = select(list(rdmVec))
             selectRdom.append(numInt)
+            wrapped = wrapper(select, list(rdmVec))
+            selectTime.append(timeit.timeit(wrapped, number=10000))
+
             numInt, _ = merge(list(rdmVec))
             mergeRdom.append(numInt)
+            wrapped = wrapper(merge, list(rdmVec))
+            mergeTime.append(timeit.timeit(wrapped, number=10000))
+
             numInt, _ = quick(list(rdmVec))
             quickRdom.append(numInt)
+            wrapped = wrapper(quick, list(rdmVec))
+            quickTime.append(timeit.timeit(wrapped, number=10000))
+
             numInt, _ = heap(list(rdmVec))
             heapRdom.append(numInt)
-            '''rdm.append((rdmVec[:], rdmVec[0]))'''
-            '''vecres3.append(vecr)'''
+            wrapped = wrapper(heap, list(rdmVec))
+            heapTime.append(timeit.timeit(wrapped, number=10000))
 
-        printf('Select')
-        printf('Best:' + str(selectBest))
-        printf('Worst:' + str(selectWors))
-        for j in range(numRdmIter):
-            printf('Random (' + str(j) + '): ' + str(selectRdom[j]))
+        rdm.append(insertRdom)
+        rdm.append(selectRdom)
+        rdm.append(mergeRdom)
+        rdm.append(quickRdom)
+        rdm.append(heapRdom)
+        rdmTim.append(insertRdom)
+        rdmTim.append(selectRdom)
+        rdmTim.append(mergeRdom)
+        rdmTim.append(quickRdom)
+        rdmTim.append(heapRdom)
 
-def printf(str):
-    print str
-    f = open('res.txt', 'a')
-    f.write(str + "\n")
-    f.close()
+
+    rng = range(numIter)
+    plt.figure(1)
+    plt.plot(rng, resSimples0, "b", linewidth=2)
+    plt.plot(rng, resSimples1, "r", linewidth=2)
+    plt.plot(rng, resSimples2, "g", linewidth=2)
+    plt.plot(rng, resSimples3, "c", linewidth=2)
+    plt.plot(rng, resSimples4, "k", linewidth=2)
+
+    plt.figure(2)
+    plt.plot(rng, resSimples5, "b", linewidth=2)
+    plt.plot(rng, resSimples6, "r", linewidth=2)
+    plt.plot(rng, resSimples7, "g", linewidth=2)
+    plt.plot(rng, resSimples8, "c", linewidth=2)
+    plt.plot(rng, resSimples9, "k", linewidth=2)
+
+    plt.figure(3)
+    plt.plot(range(numIter), rdm[0:numIter*5:5], "b", linewidth=2)
+    plt.plot(range(numIter), rdm[1:numIter*5:5], "r", linewidth=2)
+    plt.plot(range(numIter), rdm[2:numIter*5:5], "g", linewidth=2)
+    plt.plot(range(numIter), rdm[3:numIter*5:5], "c", linewidth=2)
+    plt.plot(range(numIter), rdm[4:numIter*5:5], "k", linewidth=2)
+
+    plt.figure(4)
+    plt.plot(rng, tmpSimples0, "b", linewidth=2)
+    plt.plot(rng, tmpSimples1, "r", linewidth=2)
+    plt.plot(rng, tmpSimples2, "g", linewidth=2)
+    plt.plot(rng, tmpSimples3, "c", linewidth=2)
+    plt.plot(rng, tmpSimples4, "k", linewidth=2)
+
+    plt.figure(5)
+    plt.plot(rng, tmpSimples5, "b", linewidth=2)
+    plt.plot(rng, tmpSimples6, "r", linewidth=2)
+    plt.plot(rng, tmpSimples7, "g", linewidth=2)
+    plt.plot(rng, tmpSimples8, "c", linewidth=2)
+    plt.plot(rng, tmpSimples9, "k", linewidth=2)
+
+    plt.figure(6)
+    plt.plot(range(numIter), rdmTim[0:numIter*5:5], "b", linewidth=2)
+    plt.plot(range(numIter), rdmTim[1:numIter*5:5], "r", linewidth=2)
+    plt.plot(range(numIter), rdmTim[2:numIter*5:5], "g", linewidth=2)
+    plt.plot(range(numIter), rdmTim[3:numIter*5:5], "c", linewidth=2)
+    plt.plot(range(numIter), rdmTim[4:numIter*5:5], "k", linewidth=2)
+
+    plt.show()
 
 if __name__ == "__main__":
     test()
