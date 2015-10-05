@@ -249,7 +249,7 @@ def wrapper(func, *args, **kwargs):
     return wrapped
 
 def test():
-    baseVetor = 2
+    baseVetor = 3
     numIter = 4
     numRdmIter = 1
     resSimples0 = []
@@ -421,7 +421,13 @@ def test():
     plt.plot(range(numIter), rdmTim[2:numIter*5:5], "g", linewidth=2)
     plt.plot(range(numIter), rdmTim[3:numIter*5:5], "c", linewidth=2)
     plt.plot(range(numIter), rdmTim[4:numIter*5:5], "k", linewidth=2)
-
+    '''
+    1 - 3: Medicao de numero de comandos executados
+    4 - 6: Tempo de execucao de cada algoritmo
+    1 - 4: Vetor ordenado
+    2 - 5: Vetor revertido
+    3 - 6: Vetor Aleatorio
+    '''
     plt.show()
 
 if __name__ == "__main__":
