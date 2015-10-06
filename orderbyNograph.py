@@ -160,8 +160,8 @@ def createRandom(size):
 
 def test():
     count = 0
-    baseVetor = 100
-    numIter = 30
+    baseVetor = 100000
+    numIter = 1
     numRdmIter = 1
     tmp = defaultdict(list)
     rdm = []
