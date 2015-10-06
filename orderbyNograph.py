@@ -1,4 +1,5 @@
 import array
+from datetime import date
 
 __author__ = 'Nilson Perboni Neto'
 
@@ -6,6 +7,8 @@ import time
 import random
 import math
 from random import choice
+from collections import defaultdict
+
 
 def insert(A):
     for j in range(1, len(A)):
@@ -152,31 +155,17 @@ def createVector(size):
 
 
 def createRandom(size):
-    return random.sample(range(1, size + 1), size)
+    return random.sample(range(size), size)
 
 
 def test():
     count = 0
-    baseVetor = 10
-    numIter = 1
+    baseVetor = 100
+    numIter = 30
     numRdmIter = 1
-    tmpSimples0 = []
-    tmpSimples1 = []
-    tmpSimples2 = []
-    tmpSimples3 = []
-    tmpSimples4 = []
-    tmpSimples5 = []
-    tmpSimples6 = []
-    tmpSimples7 = []
-    tmpSimples8 = []
-    tmpSimples9 = []
+    tmp = defaultdict(list)
     rdm = []
     rdmTim = []
-
-    def check(count):
-        count += 1
-        if not goList == list(ord):
-            print (False, count)
 
     def go(vect, func, save, count):
         goList = list(vect)
@@ -194,50 +183,33 @@ def test():
         quickTime = []
         heapTime = []
 
-        ord, rev = createVector(pow(baseVetor, i))
+        ord, rev = createVector(baseVetor * i)
 
-        go(ord, insert, tmpSimples0, count)
-        go(ord, select, tmpSimples1, count)
-        go(ord, mergeSort, tmpSimples2, count)
-        go(ord, quick, tmpSimples3, count)
-        go(ord, heap, tmpSimples4, count)
+        go(ord, insert, tmp[0], count)
+        go(ord, select, tmp[1], count)
+        go(ord, mergeSort, tmp[2], count)
+        go(ord, quick, tmp[3], count)
+        go(ord, heap, tmp[4], count)
 
-        go(rev, insert, tmpSimples5, count)
-        go(rev, select, tmpSimples6, count)
-        go(rev, mergeSort, tmpSimples7, count)
-        go(rev, quick, tmpSimples8, count)
-        go(rev, heap, tmpSimples9, count)
+        go(rev, insert, tmp[5], count)
+        go(rev, select, tmp[6], count)
+        go(rev, mergeSort, tmp[7], count)
+        go(rev, quick, tmp[8], count)
+        go(rev, heap, tmp[9], count)
 
         for j in range(numRdmIter):
-            rdmVec = createRandom(pow(baseVetor, i))
-
-            tempo = time.process_time()
-            insert(list(rdmVec))
-            insertTime.append(time.process_time() - tempo)
-
-            tempo = time.process_time()
-            select(list(rdmVec))
-            selectTime.append(time.process_time() - tempo)
-
-            tempo = time.process_time()
-            mergeSort(list(rdmVec))
-            mergeTime.append(time.process_time() - tempo)
-
-            tempo = time.process_time()
-            quick(list(rdmVec))
-            quickTime.append(time.process_time() - tempo)
-
-            tempo = time.process_time()
-            heap(list(rdmVec))
-            heapTime.append(time.process_time() - tempo)
+            rdmVec = createRandom(baseVetor * i)
+            go(rdmVec, insert, insertTime, count)
+            go(rdmVec, select, selectTime, count)
+            go(rdmVec, mergeSort, mergeTime, count)
+            go(rdmVec, quick, heapTime, count)
+            go(rdmVec, heap, quickTime, count)
 
         rdmTim.append(insertTime)
         rdmTim.append(selectTime)
         rdmTim.append(mergeTime)
         rdmTim.append(quickTime)
         rdmTim.append(heapTime)
-
-    rng = range(numIter)
 
     '''
     1 - 3: Medicao de numero de comandos executados
@@ -246,12 +218,17 @@ def test():
     2 - 5: Vetor revertido
     3 - 6: Vetor Aleatorio
     '''
-    tmp = [tmpSimples0, tmpSimples1, tmpSimples2, tmpSimples3, tmpSimples4, tmpSimples5, tmpSimples6, tmpSimples7,
-           tmpSimples8, tmpSimples9]
 
     print(tmp)
-    print(rdm)
     print(rdmTim)
+
+    f = open('workfile.txt', 'a+')
+    f.write(str(date.today()))
+    f.write(str(baseVetor))
+    f.write(str(numIter))
+    f.write(str(tmp))
+    f.write(str(rdmTim))
+    f.close()
 
 if __name__ == "__main__":
     test()
