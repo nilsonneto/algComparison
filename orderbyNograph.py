@@ -1,41 +1,32 @@
+import array
+
 __author__ = 'Nilson Perboni Neto'
 
 import time
 import random
+import math
 from random import choice
 
-def insert(alist):
-    for index in range(1,len(alist)):
-
-        currentvalue = alist[index]
-        position = index
-
-        while position>0 and alist[position-1]>currentvalue:
-            alist[position]=alist[position-1]
-            position = position-1
-
-        alist[position]=currentvalue
-    return alist
+def insert(A):
+    for j in range(1, len(A)):
+        chave = A[j]
+        i = j - 1
+        while (i >= 0) and (A[i] > chave):
+            A[i + 1] = A[i]
+            i -= 1
+        A[i+1] = chave
 
 
-def select(alist):
-    for fillslot in range(len(alist)-1,0,-1):
-        positionOfMax=0
-        for location in range(1,fillslot+1):
-            if alist[location]>alist[positionOfMax]:
-                positionOfMax = location
-        temp = alist[fillslot]
-        alist[fillslot] = alist[positionOfMax]
-        alist[positionOfMax] = temp
-    return alist
+def select(A):
+    for i in range(0, len(A) - 1, 1):
+        min = i
+        for j in range(i + 1, len(A), 1):
+            if A[j] < A[min]:
+                min = j
+        A[i], A[min] = A[min], A[i]
 
-
-def merge(alist):
-    mergeSort(alist)
-    return alist
 
 def mergeSort(alist):
-    '''print("Splitting ",alist)'''
     if len(alist)>1:
         mid = len(alist)//2
         lefthalf = alist[:mid]
@@ -65,7 +56,6 @@ def mergeSort(alist):
             alist[k]=righthalf[j]
             j=j+1
             k=k+1
-    '''print("Merging ",alist)'''
 
 
 def heap(lst):
@@ -96,15 +86,63 @@ def siftdown(lst, start, end):
         else:
             break
 
+'''
+def quick(vetor):
+    quick2(vetor, 0, len(vetor) - 1)
 
-def quick(a):
-    if len(a) <= 1:
-        return a
-    else:
-        q = choice(a)
-        res = quick([elem for elem in a if elem < q])
-        res2 = quick([elem for elem in a if elem > q])
-        return res + [q] * a.count(q) + res2
+
+def quick2(vetor, p, r):
+    if p <= r:
+        q = particione(vetor, p, r)
+        quick2(vetor, p, q - 1)
+        quick2(vetor, q + 1, r)
+
+
+def particione(vetor, p, r):
+    x = int(vetor[r])
+    i = p - 1
+    for j in range(p, r):
+        if vetor[j] <= x:
+            i += 1
+            vetor[i], vetor[j] = vetor[j], vetor[i]
+    vetor[i + 1], vetor[r] = vetor[r], vetor[i + 1]
+    return i + 1
+'''
+
+def quick(A):
+    quickSort(A, len(A))
+
+def quickSort(arr, elements):
+    i = 0
+    beg = [0] * (elements + 1)
+    end = [0] * (elements + 1)
+    beg[0] = 0
+    end[0] = elements
+    while i >= 0:
+        L = beg[i]
+        R = end[i] - 1
+        if L < R:
+            piv = arr[L]
+            if (i == elements):
+                return 0
+            while L < R:
+                while arr[R] >= piv and L < R:
+                    R -= 1
+                if L < R:
+                    arr[L] = arr[R]
+                    L += 1
+                while arr[L] <= piv and L < R:
+                    L += 1
+                if L < R:
+                    arr[R] = arr[L]
+                    R -= 1
+            arr[L] = piv
+            beg[i+1] = L + 1
+            end[i+1] = end[i]
+            end[i] = L
+            i += 1
+        else:
+            i -= 1
 
 
 def createVector(size):
@@ -118,8 +156,9 @@ def createRandom(size):
 
 
 def test():
+    count = 0
     baseVetor = 10
-    numIter = 4
+    numIter = 1
     numRdmIter = 1
     tmpSimples0 = []
     tmpSimples1 = []
@@ -134,6 +173,20 @@ def test():
     rdm = []
     rdmTim = []
 
+    def check(count):
+        count += 1
+        if not goList == list(ord):
+            print (False, count)
+
+    def go(vect, func, save, count):
+        goList = list(vect)
+        tempo = time.process_time()
+        func(goList)
+        save.append(time.process_time() - tempo)
+        count += 1
+        if not goList == list(ord):
+            print (False, count)
+
     for i in range(1, numIter + 1):
         insertTime = []
         selectTime = []
@@ -143,45 +196,17 @@ def test():
 
         ord, rev = createVector(pow(baseVetor, i))
 
-        tempo = time.process_time()
-        insert(list(ord))
-        tmpSimples0.append(time.process_time() - tempo)
+        go(ord, insert, tmpSimples0, count)
+        go(ord, select, tmpSimples1, count)
+        go(ord, mergeSort, tmpSimples2, count)
+        go(ord, quick, tmpSimples3, count)
+        go(ord, heap, tmpSimples4, count)
 
-        tempo = time.process_time()
-        select(list(ord))
-        tmpSimples1.append(time.process_time() - tempo)
-
-        tempo = time.process_time()
-        merge(list(ord))
-        tmpSimples2.append(time.process_time() - tempo)
-
-        tempo = time.process_time()
-        quick(list(ord))
-        tmpSimples3.append(time.process_time() - tempo)
-
-        tempo = time.process_time()
-        heap(list(ord))
-        tmpSimples4.append(time.process_time() - tempo)
-
-        tempo = time.process_time()
-        insert(list(rev))
-        tmpSimples5.append(time.process_time() - tempo)
-
-        tempo = time.process_time()
-        select(list(rev))
-        tmpSimples6.append(time.process_time() - tempo)
-
-        tempo = time.process_time()
-        merge(list(rev))
-        tmpSimples7.append(time.process_time() - tempo)
-
-        tempo = time.process_time()
-        quick(list(rev))
-        tmpSimples8.append(time.process_time() - tempo)
-
-        tempo = time.process_time()
-        heap(list(rev))
-        tmpSimples9.append(time.process_time() - tempo)
+        go(rev, insert, tmpSimples5, count)
+        go(rev, select, tmpSimples6, count)
+        go(rev, mergeSort, tmpSimples7, count)
+        go(rev, quick, tmpSimples8, count)
+        go(rev, heap, tmpSimples9, count)
 
         for j in range(numRdmIter):
             rdmVec = createRandom(pow(baseVetor, i))
@@ -195,7 +220,7 @@ def test():
             selectTime.append(time.process_time() - tempo)
 
             tempo = time.process_time()
-            merge(list(rdmVec))
+            mergeSort(list(rdmVec))
             mergeTime.append(time.process_time() - tempo)
 
             tempo = time.process_time()
