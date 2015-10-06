@@ -211,14 +211,6 @@ def test():
         rdmTim.append(quickTime)
         rdmTim.append(heapTime)
 
-    '''
-    1 - 3: Medicao de numero de comandos executados
-    4 - 6: Tempo de execucao de cada algoritmo
-    1 - 4: Vetor ordenado
-    2 - 5: Vetor revertido
-    3 - 6: Vetor Aleatorio
-    '''
-
     print(tmp)
     print(rdmTim)
 
