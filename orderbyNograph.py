@@ -5,8 +5,6 @@ __author__ = 'Nilson Perboni Neto'
 
 import time
 import random
-import math
-from random import choice
 from collections import defaultdict
 
 
@@ -62,9 +60,6 @@ def mergeSort(alist):
 
 
 def heap(lst):
-    ''' Heapsort. Note: this function sorts in-place (it mutates the list). '''
-
-    # in pseudo-code, heapify only called once, so inline it here
     for start in range(int((len(lst)-2)/2), -1, -1):
         siftdown(lst, start, len(lst)-1)
 
@@ -157,14 +152,9 @@ def createVector(size):
 def createRandom(size):
     return random.sample(range(size), size)
 
-
-def test():
+def test(baseVetor=1000, numIter=1, numRdmIter=1, simOn=0, insOn=0, selOn=0, merOn=0, quiOn=0, heaOn=1):
     count = 0
-    baseVetor = 100000
-    numIter = 1
-    numRdmIter = 1
     tmp = defaultdict(list)
-    rdm = []
     rdmTim = []
 
     def go(vect, func, save, count):
@@ -185,25 +175,34 @@ def test():
 
         ord, rev = createVector(baseVetor * i)
 
-        go(ord, insert, tmp[0], count)
-        go(ord, select, tmp[1], count)
-        go(ord, mergeSort, tmp[2], count)
-        go(ord, quick, tmp[3], count)
-        go(ord, heap, tmp[4], count)
+        if simOn:
+            if insOn:
+                go(ord, insert, tmp[0], count)
+                go(rev, insert, tmp[5], count)
 
-        go(rev, insert, tmp[5], count)
-        go(rev, select, tmp[6], count)
-        go(rev, mergeSort, tmp[7], count)
-        go(rev, quick, tmp[8], count)
-        go(rev, heap, tmp[9], count)
+            if selOn:
+                go(ord, select, tmp[1], count)
+                go(rev, select, tmp[6], count)
+
+            if merOn:
+                go(ord, mergeSort, tmp[2], count)
+                go(rev, mergeSort, tmp[7], count)
+
+            if quiOn:
+                go(ord, quick, tmp[3], count)
+                go(rev, quick, tmp[8], count)
+
+            if heaOn:
+                go(ord, heap, tmp[4], count)
+                go(rev, heap, tmp[9], count)
 
         for j in range(numRdmIter):
             rdmVec = createRandom(baseVetor * i)
-            go(rdmVec, insert, insertTime, count)
-            go(rdmVec, select, selectTime, count)
-            go(rdmVec, mergeSort, mergeTime, count)
-            go(rdmVec, quick, heapTime, count)
-            go(rdmVec, heap, quickTime, count)
+            if insOn: go(rdmVec, insert, insertTime, count)
+            if selOn: go(rdmVec, select, selectTime, count)
+            if merOn: go(rdmVec, mergeSort, mergeTime, count)
+            if quiOn: go(rdmVec, quick, quickTime, count)
+            if heaOn: go(rdmVec, heap, heapTime, count)
 
         rdmTim.append(insertTime)
         rdmTim.append(selectTime)
@@ -211,16 +210,17 @@ def test():
         rdmTim.append(quickTime)
         rdmTim.append(heapTime)
 
-    print(tmp)
+    if simOn: print(tmp)
     print(rdmTim)
 
     f = open('workfile.txt', 'a+')
     f.write(str(date.today()))
     f.write(str(baseVetor))
     f.write(str(numIter))
-    f.write(str(tmp))
+    if simOn: f.write(str(tmp))
     f.write(str(rdmTim))
     f.close()
 
 if __name__ == "__main__":
-    test()
+    simOn = 0
+    test(1000000,1,1,simOn,0,0,0,1,1)
